@@ -4,15 +4,19 @@ import multer from "multer";
 import path from "path";
 import FormData from "form-data";
 import { fileURLToPath } from "url";
+import cors from "cors";
 
 const app = express();
 const upload = multer(); // handles multipart/form-data in memory
-
 const PORT = 3000;
+const BASE_URL = "https://dankshare.itsbr0dyy.dev";
 
-// Needed for ES modules to get __dirname
+// ES modules __dirname fix
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Enable CORS so Chatterino or other clients can call API
+app.use(cors());
 
 // Serve static files (CSS, JS, images, favicon) from "public" folder
 app.use(express.static(path.join(__dirname, "public")));
@@ -22,26 +26,38 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Endpoint for frontend to upload images
-app.post("/api/upload", upload.single("image"), async (req, res) => {
+// Upload endpoint for frontend or Chatterino
+app.post("/api/upload", upload.single("file"), async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ error: "No image provided." });
+    if (!req.file) return res.status(400).json({ error: "No file provided." });
 
-    // Use Node form-data
     const formData = new FormData();
     formData.append("file", req.file.buffer, req.file.originalname);
 
-    const kappaResponse = await axios.post("https://kappa.lol/api/upload", formData, {
-      headers: formData.getHeaders(), // Important!
-    });
+    const headers = { ...formData.getHeaders(), "Content-Length": formData.getLengthSync() };
 
-    const { id } = kappaResponse.data;
+    const kappaResponse = await axios.post("https://kappa.lol/api/upload", formData, { headers });
+
+    const id = kappaResponse.data.id;
     const imageUrl = `https://dankshare.itsbr0dyy.dev/view/${id}`;
 
-    res.json({ id, imageUrl });
+    // Check query ?dev=true for developer API
+    if (req.query.dev === "true") {
+      return res.json({
+        id,
+        url: imageUrl,
+        delete: kappaResponse.data.delete,
+        type: kappaResponse.data.type,
+        ext: kappaResponse.data.ext,
+      });
+    }
+
+    // Default: Chatterino-friendly
+    res.json({ link: imageUrl });
+
   } catch (err) {
-    console.error(err.response?.data || err.message);
-    res.status(500).json({ error: "Failed to upload image." });
+    console.error("Upload error:", err.response?.data || err.message);
+    res.status(500).json({ error: "Failed to upload file." });
   }
 });
 
@@ -49,16 +65,13 @@ app.post("/api/upload", upload.single("image"), async (req, res) => {
 app.get("/view/:id", async (req, res) => {
   try {
     const { id } = req.params;
-
     const imageUrl = `https://kappa.lol/${id}`;
 
     const response = await axios.get(imageUrl, {
-      responseType: "stream"
+      responseType: "stream",
     });
 
-    // Forward content type (png, jpg, gif, etc)
     res.setHeader("Content-Type", response.headers["content-type"]);
-
     response.data.pipe(res);
 
   } catch (err) {
@@ -67,4 +80,4 @@ app.get("/view/:id", async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
