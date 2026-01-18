@@ -36,7 +36,7 @@ app.post("/api/upload", upload.single("image"), async (req, res) => {
     });
 
     const { id } = kappaResponse.data;
-    const imageUrl = `http://localhost:3000/view/${id}`;
+    const imageUrl = `https://dankshare.itsbr0dyy.dev/view/${id}`;
 
     res.json({ id, imageUrl });
   } catch (err) {
