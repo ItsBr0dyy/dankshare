@@ -52,7 +52,7 @@ app.post("/api/upload", uploadFields, async (req, res) => {
     );
 
     const id = kappaResponse.data.id;
-    const imageUrl = `https://dankshare.itsbr0dyy.dev/view/${id}`;
+    const imageUrl = `https://dankshare.itsbr0dyy.dev/${id}`;
 
     res.json({ id, imageUrl, link: imageUrl });
 
@@ -62,10 +62,18 @@ app.post("/api/upload", uploadFields, async (req, res) => {
   }
 });
 
-// Example route to show image using kappa URL
-app.get("/view/:id", async (req, res) => {
+app.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+
+    // Ignore common frontend/API paths
+    if (
+      id === "api" ||
+      id === "favicon.ico"
+    ) {
+      return res.status(404).end();
+    }
+
     const imageUrl = `https://kappa.lol/${id}`;
 
     const response = await axios.get(imageUrl, {
