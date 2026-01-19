@@ -140,6 +140,23 @@ input {
 .heart {
   color: rgb(247, 0, 255);
 }
+
+.gif-text {
+  font-size: 64px;
+  font-weight: 730;
+  font-family: Nunito, Nunito-sans, sans-serif;
+
+  background-image: url("https://cdn.7tv.app/paint/01JHXJFACX42RV996VE9933TB8/layer/01JMMQ2PBAK6PK2XYX8NT1QYB4/1x.webp");
+  background-size: cover;
+  background-position: center;
+
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
 </style>
 </head>
 
@@ -149,7 +166,7 @@ input {
 
   <img src="https://cdn.7tv.app/emote/01EZPJA6T0000C438200A44F31/4x.png" class="logo">
 
-  <h1>DankShare</h1>
+  <h1 class="gif-text">DankShare</h1>
   <div class="subtitle">Instant image hosting powered by Kappa CDN</div>
 
   <div class="upload-area" id="uploadArea">
@@ -162,7 +179,7 @@ input {
   <!-- FOOTER -->
   <div class="footer">
 
-    <button class="api-toggle" id="apiBtn">Developer API</button>
+    <button class="api-toggle" id="apiBtn">Show API (Coming Soon)</button>
 
 <div class="api-box" id="apiBox">
 
