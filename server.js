@@ -27,37 +27,40 @@ app.get("/", (req, res) => {
 });
 
 // Upload endpoint for frontend or Chatterino
-app.post("/api/upload", upload.single("file"), async (req, res) => {
+app.post("/api/upload", upload.single("image"), async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ error: "No file provided." });
+    if (!req.file) {
+      return res.status(400).json({ error: "No file provided" });
+    }
 
     const formData = new FormData();
-    formData.append("file", req.file.buffer, req.file.originalname);
 
-    const headers = { ...formData.getHeaders(), "Content-Length": formData.getLengthSync() };
+    formData.append("file", req.file.buffer, {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype
+    });
 
-    const kappaResponse = await axios.post("https://kappa.lol/api/upload", formData, { headers });
+    const headers = formData.getHeaders();
+
+    const kappaResponse = await axios.post(
+      "https://kappa.lol/api/upload",
+      formData,
+      { headers }
+    );
 
     const id = kappaResponse.data.id;
     const imageUrl = `https://dankshare.itsbr0dyy.dev/view/${id}`;
 
-    // Check query ?dev=true for developer API
-    if (req.query.dev === "true") {
-      return res.json({
-        id,
-        url: imageUrl,
-        delete: kappaResponse.data.delete,
-        type: kappaResponse.data.type,
-        ext: kappaResponse.data.ext,
-      });
-    }
-
-    // Default: Chatterino-friendly
-    res.json({ link: imageUrl });
+    // UNIVERSAL RESPONSE (Frontend + Chatterino)
+    res.json({
+      id,
+      imageUrl,     // frontend
+      link: imageUrl // chatterino
+    });
 
   } catch (err) {
     console.error("Upload error:", err.response?.data || err.message);
-    res.status(500).json({ error: "Failed to upload file." });
+    res.status(500).json({ error: "Upload failed" });
   }
 });
 
