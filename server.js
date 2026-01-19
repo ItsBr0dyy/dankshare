@@ -26,18 +26,21 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+const uploadFields = upload.fields([{ name: "image", maxCount: 1 }, { name: "file", maxCount: 1 }]);
+
 // Upload endpoint for frontend or Chatterino
-app.post("/api/upload", upload.single("image"), async (req, res) => {
+app.post("/api/upload", uploadFields, async (req, res) => {
   try {
-    if (!req.file) {
+    const file = req.files?.image?.[0] || req.files?.file?.[0]; // pick whichever exists
+
+    if (!file) {
       return res.status(400).json({ error: "No file provided" });
     }
 
     const formData = new FormData();
-
-    formData.append("file", req.file.buffer, {
-      filename: req.file.originalname,
-      contentType: req.file.mimetype
+    formData.append("file", file.buffer, {
+      filename: file.originalname,
+      contentType: file.mimetype
     });
 
     const headers = formData.getHeaders();
@@ -51,12 +54,7 @@ app.post("/api/upload", upload.single("image"), async (req, res) => {
     const id = kappaResponse.data.id;
     const imageUrl = `https://dankshare.itsbr0dyy.dev/view/${id}`;
 
-    // UNIVERSAL RESPONSE (Frontend + Chatterino)
-    res.json({
-      id,
-      imageUrl,     // frontend
-      link: imageUrl // chatterino
-    });
+    res.json({ id, imageUrl, link: imageUrl });
 
   } catch (err) {
     console.error("Upload error:", err.response?.data || err.message);
