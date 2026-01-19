@@ -287,7 +287,7 @@ async function uploadFile(file) {
     const data = await res.json();
 
     const routeUrl = data.imageUrl;
-    const kappaUrl = routeUrl.replace("/view/", "https://kappa.lol/");
+    const kappaUrl = routeUrl.replace("https://dankshare.itsbr0dyy.dev/", "https://kappa.lol/");
 
     result.innerHTML = `
       <div><b>Share Link:</b></div>
