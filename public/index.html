@@ -157,6 +157,28 @@ input {
   -webkit-text-fill-color: transparent;
 }
 
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.footer-btn {
+  background: #08804e;
+  color: white;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.footer-btn:hover {
+  opacity: 0.85;
+}
+
 </style>
 </head>
 
@@ -258,10 +280,13 @@ Same configuration as Chatterino
 
 </div>
 
-    <div>
-      Made with 💜 by ItsBr0dyy
+    <div class="footer-links">
+      <a href="https://github.com/ItsBr0dyy" class="footer-btn">GitHub</a>
+      <a href="https://streamelements.com/itsbr0dyy/tip" class="footer-btn">Donate</a>
     </div>
 
+    <div>
+      Made with <span class="heart">💜</span> by ItsBr0dyy
   </div>
 
 </div>
