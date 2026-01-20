@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DankShare</title>
+  <link rel="icon" href="https://cdn.7tv.app/emote/01EZPJA6T0000C438200A44F31/4x.png">
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Segoe UI, Arial, sans-serif;
+  background: #0f0f0f;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background: #181818;
+  padding: 30px;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 550px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.6);
+  text-align: center;
+}
+
+.logo {
+  width: 85px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  opacity: 0.7;
+  margin-bottom: 25px;
+}
+
+.upload-area {
+  border: 2px dashed #099b5e;
+  padding: 45px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 16px;
+}
+
+.upload-area:hover {
+  background: rgba(255,69,0,0.05);
+}
+
+.upload-area.dragover {
+  background: rgba(255,69,0,0.12);
+}
+
+input {
+  display: none;
+}
+
+.result {
+  margin-top: 20px;
+  word-break: break-word;
+}
+
+.preview {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  background: #099b5e;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn.secondary {
+  background: #262626;
+  border: 1px solid #099b5e;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+/* Footer */
+
+.footer {
+  margin-top: 25px;
+  border-top: 1px solid #262626;
+  padding-top: 15px;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.api-toggle {
+  background: none;
+  border: none;
+  color: #099b5e;
+  cursor: pointer;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.api-box {
+  display: block;
+  background: #242424;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: left;
+  font-family: monospace;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.heart {
+  color: rgb(247, 0, 255);
+}
+
+.gif-text {
+  font-size: 64px;
+  font-weight: 730;
+  font-family: Nunito, Nunito-sans, sans-serif;
+
+  background-image: url("https://cdn.7tv.app/paint/01JHXJFACX42RV996VE9933TB8/layer/01JMMQ2PBAK6PK2XYX8NT1QYB4/1x.webp");
+  background-size: cover;
+  background-position: center;
+
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <img src="https://cdn.7tv.app/emote/01EZPJA6T0000C438200A44F31/4x.png" class="logo">
+
+  <h1 class="gif-text">DankShare</h1>
+  <div class="subtitle">Instant image hosting powered by Kappa CDN</div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+
+<div class="api-box" id="apiBox">
+
+<b>Native API</b>
+<br><br>
+
+• <b>POST</b> https://dankshare.itsbr0dyy.dev/api/upload  
+&nbsp;&nbsp;→ Upload any file using <b>multipart/form-data</b>  
+&nbsp;&nbsp;→ Key: <code>image</code>  
+
+<br><br>
+
+• <b>GET</b> /view/:id  
+&nbsp;&nbsp;→ Access uploaded file  
+
+<br><br>
+
+<b>Response Format</b>
+
+<pre>
+{
+  "url": "https://dankshare.itsbr0dyy.dev/abc123"
+}
+</pre>
+
+<hr style="border:0;border-top:1px solid #333;margin:12px 0;">
+
+<b>ShareX</b>
+<br><br>
+
+• <b>Request Type:</b> POST
+
+<br><br>
+
+• <b>Request URL:</b> https://dankshare.itsbr0dyy.dev/api/upload
+
+<br><br>
+
+• <b>File form name:</b> image
+
+<br><br>
+
+• <b>URL response path:</b> {url}
+
+<br><br>
+
+• <b>Note:</b> Accepts any file type
+
+<br><br>
+
+<hr style="border:0;border-top:1px solid #333;margin:12px 0;">
+
+<b>Chatterino Integration</b>
+<br><br>
+
+• Open <b>Chatterino Settings</b>  
+• Go to <b>External Tools</b>  
+• Set <b>Image Uploader</b> to <b>Custom</b>  
+• Paste this command:
+
+<pre>
+POST https://dankshare.itsbr0dyy.dev/api/upload image {url}
+</pre>
+
+<img src="https://kappa.lol/5omRt4 " style="width:100%;border-radius:8px;margin-top:8px;">
+
+<hr style="border:0;border-top:1px solid #333;margin:12px 0;">
+
+<b>DankChat</b>
+<br><br>
+
+Same configuration as Chatterino
+
+</div>
+
+    <div>
+      Made with 💜 by ItsBr0dyy
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function copyLink(link) {
+  navigator.clipboard.writeText(link);
+  alert("Copied to clipboard!");
+}
+</script>
+
+
+</body>
+</html>
