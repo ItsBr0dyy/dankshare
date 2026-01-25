@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 
 const app = express();
-const upload = multer(); // handles multipart/form-data in memory
+const upload = multer();
 const PORT = 3000;
 const BASE_URL = "https://dankshare.itsbr0dyy.dev";
 
@@ -15,23 +15,19 @@ const BASE_URL = "https://dankshare.itsbr0dyy.dev";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Enable CORS so Chatterino or other clients can call API
 app.use(cors());
 
-// Serve static files (CSS, JS, images, favicon) from "public" folder
 app.use(express.static(path.join(__dirname, "public")));
 
-// Home page route
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 const uploadFields = upload.fields([{ name: "image", maxCount: 1 }, { name: "file", maxCount: 1 }]);
 
-// Upload endpoint for frontend or Chatterino
 app.post("/api/upload", uploadFields, async (req, res) => {
   try {
-    const file = req.files?.image?.[0] || req.files?.file?.[0]; // pick whichever exists
+    const file = req.files?.image?.[0] || req.files?.file?.[0];
 
     if (!file) {
       return res.status(400).json({ error: "No file provided" });
@@ -66,7 +62,6 @@ app.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Ignore common frontend/API paths
     if (
       id === "api" ||
       id === "favicon.ico"
