@@ -17,6 +17,5 @@ npm install
 ```bash
 node server.js
 ```
-=====
 
 ## NOT CURRENTLY UP
